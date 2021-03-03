@@ -28,8 +28,9 @@ class MessageServiceTest {
     @Test
     void onUnknownReceived() throws IOException, TelegramApiException {
         Update update = objectMapper.readValue( new File( "src/test/resources/update.json" ), Update.class );
-        SendMessage actualResult = messageService.onUpdateReceived( update );
-        SendMessage expectedResult = makeMessage( "Do no" );
+        SendMessage tempResult = messageService.onUpdateReceived( update );
+        String actualResult = tempResult.getText( );
+        SendMessage expectedResult = makeMessage(update.getMessage().getText());
         assertEquals( expectedResult, actualResult );
     }
 
@@ -57,9 +58,10 @@ class MessageServiceTest {
         assertEquals( expectedResult, actualResult );
     }
 
+    @Test
     private SendMessage makeMessage(String text) {
         SendMessage sendMessage = new SendMessage( );
-        sendMessage.setChatId( 468388774L );
+        sendMessage.setChatId( sendMessage.getChatId( ) );
         sendMessage.setText( text );
         return sendMessage;
     }

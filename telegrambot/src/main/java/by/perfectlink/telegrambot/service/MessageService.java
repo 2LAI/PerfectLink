@@ -1,6 +1,5 @@
 package by.perfectlink.telegrambot.service;
 
-import by.perfectlink.telegrambot.logic.PerfectLink;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -8,9 +7,6 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
-
-import java.io.IOException;
-import java.util.HashMap;
 
 
 @Service
@@ -53,7 +49,6 @@ public class MessageService {
                         sendMessage.setText( "Какую ссылку вы хотите удалить? Введите номер: " );
                         telegramBot.execute( sendMessage );
                         break;
-
                     default:
                         sendMessage.setText( "Вы ввели: " + message.getText( ) );
                         telegramBot.execute( sendMessage );

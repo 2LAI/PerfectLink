@@ -22,17 +22,16 @@ class TelegramBotTest {
     @Autowired
     ObjectMapper objectMapper;
 
-//    @Test
+    @Test
     void onUpdateReceived() throws IOException {
-        Update update = objectMapper.readValue(new File("src/test/resources/update.json"), Update.class);
-        telegramBot.onUpdateReceived(update);
+        Update update = objectMapper.readValue( new File( "src/test/resources/update.json" ), Update.class );
+        telegramBot.onUpdateReceived( update );
     }
 
-//    @Test
-    void sendMessage() throws TelegramApiException {
-        SendMessage sendMessage = new SendMessage();
-        sendMessage.setChatId(468388774L);
-        sendMessage.setText("Hello bot");
-        telegramBot.execute(sendMessage);
+    @Test
+    void sendMessage() {
+        SendMessage sendMessage = new SendMessage( );
+        sendMessage.setChatId( 468388774L );
+
     }
 }

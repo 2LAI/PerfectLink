@@ -48,6 +48,12 @@ public class MessageService {
                                 "\n Показать все сслыки: -> /show" );
                         telegramBot.execute( sendMessage );
                         break;
+                    case "/delete":
+                        telegramBot.setStateOfBot( "delete" );
+                        sendMessage.setText( "Какую ссылку вы хотите удалить? Введите номер: " );
+                        telegramBot.execute( sendMessage );
+                        break;
+
                     default:
                         sendMessage.setText( "Вы ввели: " + message.getText( ) );
                         telegramBot.execute( sendMessage );

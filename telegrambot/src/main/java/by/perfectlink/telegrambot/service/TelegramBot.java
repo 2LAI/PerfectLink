@@ -15,7 +15,6 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.Keyboard
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -38,14 +37,14 @@ public class TelegramBot extends TelegramLongPollingBot {
     private String linkName;
     private String uRL;
     private String someInformation;
+    private String keyToDelete;
+
     private final HashMap<Integer, PerfectLink> linkMap = new HashMap<>( );
 
     @Autowired
     ObjectMapper objectMapper;
     @Autowired
     MessageService messageService;
-    @Autowired
-    EspecialMessageService especialMessageService;
 
     @Override
     public void onUpdateReceived(Update update) {
@@ -104,8 +103,17 @@ public class TelegramBot extends TelegramLongPollingBot {
                 createLink( linkName, uRL, someInformation );
                 setStateOfBot( "Start" );
                 break;
-//            case (""):
-//                break;
+            case ("delete"):
+                sendMessage = getSendMessage( update );
+                try {
+                    updateSendMessage( update, sendMessage );
+                } catch ( TelegramApiException e ) {
+                    e.printStackTrace( );
+                }
+                deleteLink( Integer.parseInt( keyToDelete ) );
+                setStateOfBot( "Start" );
+                counter--;
+                break;
         }
     }
 
@@ -129,6 +137,11 @@ public class TelegramBot extends TelegramLongPollingBot {
         counter++;
     }
 
+    private void deleteLink(int deleteKey) {
+        linkMap.remove( deleteKey );
+        counter++;
+    }
+
 
     private void updateSendMessage(Update update, SendMessage sendMessage) throws TelegramApiException {
         switch (stateOfBot) {
@@ -141,6 +154,8 @@ public class TelegramBot extends TelegramLongPollingBot {
             case "SomeInformation":
                 addInformationAboutSomeInformation( update, sendMessage );
                 break;
+            case "delete":
+                addInformationAboutKeyDelete( update, sendMessage );
             default:
                 sendMessage.setText( "Вы ввели" + sendMessage.getText( ) );
         }
@@ -156,6 +171,12 @@ public class TelegramBot extends TelegramLongPollingBot {
         return sendMessage;
     }
 
+    private void addInformationAboutKeyDelete(Update update, SendMessage sendMessage) throws TelegramApiException {
+        sendMessage.setText( "Ссылка удалена!: " );
+        execute( sendMessage );
+        keyToDelete = update.getMessage( ).getText( );
+
+    }
 
     private void addInformationAboutLinkName(Update update, SendMessage sendMessage) throws TelegramApiException {
         sendMessage.setText( "Введите URL: " );

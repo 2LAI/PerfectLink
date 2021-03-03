@@ -67,7 +67,17 @@ public class TelegramBot extends TelegramLongPollingBot {
                 } else if ( update.getMessage( ).getText( ).equals( "/show" ) ) {
                     sendMessage = getSendMessage( update );
                     showLinks( sendMessage, linkMap );
+                } else {
+                    saveJson( update );
+                    sendMessage = getSendMessage( update );
+                    sendMessage.setText( "Вы ввели: " + update.getMessage( ).getText( ) );
+                    try {
+                        execute( sendMessage );
+                    } catch ( TelegramApiException e ) {
+                        e.printStackTrace( );
+                    }
                 }
+
                 break;
             case ("Create"):
                 sendMessage = getSendMessage( update );
@@ -159,7 +169,6 @@ public class TelegramBot extends TelegramLongPollingBot {
             default:
                 sendMessage.setText( "Вы ввели" + sendMessage.getText( ) );
         }
-
     }
 
     private SendMessage getSendMessage(Update update) {
@@ -172,7 +181,7 @@ public class TelegramBot extends TelegramLongPollingBot {
     }
 
     private void addInformationAboutKeyDelete(Update update, SendMessage sendMessage) throws TelegramApiException {
-        sendMessage.setText( "Ссылка удалена!: " );
+        sendMessage.setText( "Ссылка удалена!" );
         execute( sendMessage );
         keyToDelete = update.getMessage( ).getText( );
 

@@ -1,4 +1,4 @@
-package by.perfectlink.telegrambot.logic;
+package by.perfectlink.telegrambot.entity;
 
 
 public enum BotState {
